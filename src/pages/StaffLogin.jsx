@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
-import { AlertCircle, Eye, EyeOff, Lock, Mail, Shield, HelpCircle } from 'lucide-react';
+import { AlertCircle, Eye, EyeOff, Lock, Mail, Shield } from 'lucide-react';
 
 export const StaffLogin = () => {
   const { user, isAdmin, loading: authLoading, loginAdmin } = useAuth();
@@ -332,53 +332,6 @@ export const StaffLogin = () => {
             )}
           </button>
         </form>
-
-        {/* Footer Navigation & Support Links */}
-        <div
-          style={{
-            marginTop: '1.15rem',
-            paddingTop: '0.85rem',
-            borderTop: '1px solid #f1f5f9',
-            textAlign: 'center',
-            fontSize: '0.84rem',
-          }}
-        >
-          <div style={{ marginBottom: '0.45rem' }}>
-            <span style={{ color: '#64748b' }}>Are you a patient? </span>
-            <Link
-              to="/login"
-              style={{
-                color: '#15803d',
-                fontWeight: 600,
-                textDecoration: 'none',
-              }}
-            >
-              Log in here &rarr;
-            </Link>
-          </div>
-
-          <div>
-            <button
-              type="button"
-              onClick={() => setShowSupervisorModal(true)}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#94a3b8',
-                fontSize: '0.78rem',
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                textDecoration: 'underline',
-                textUnderlineOffset: '2px',
-              }}
-            >
-              <HelpCircle size={13} />
-              Need administrator access or password reset? Contact system supervisor
-            </button>
-          </div>
-        </div>
 
         {/* Modal for Supervisor Contact Assistance */}
         {showSupervisorModal && (

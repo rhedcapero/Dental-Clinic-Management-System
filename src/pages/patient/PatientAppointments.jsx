@@ -172,12 +172,9 @@ export const PatientAppointments = () => {
               <Calendar size={48} />
             </div>
             <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>No appointments found.</h3>
-            <p style={{ fontSize: '0.95rem', marginBottom: '1.5rem', maxWidth: '340px', marginInline: 'auto' }}>
+            <p style={{ fontSize: '0.95rem', maxWidth: '340px', margin: '0 auto' }}>
               You don't have any appointments scheduled yet. Book your first visit now.
             </p>
-            <button onClick={() => setShowBookingModal(true)} className="btn btn-primary">
-              Book Appointment
-            </button>
           </div>
         </div>
       )}

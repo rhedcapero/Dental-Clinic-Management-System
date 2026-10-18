@@ -141,12 +141,6 @@ export const Login = () => {
             Register here
           </Link>
         </div>
-
-        <div style={{ marginTop: '0.75rem', textAlign: 'center', fontSize: '0.85rem' }}>
-          <Link to="/admin/login" style={{ color: '#94a3b8' }}>
-            System Administrator? Log in here &rarr;
-          </Link>
-        </div>
       </div>
     </div>
   );

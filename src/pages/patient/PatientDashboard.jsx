@@ -6,7 +6,6 @@ import { formatQueueNumber } from '../../components/QueueCard';
 import {
   Ticket,
   Calendar,
-  History,
   User,
   ArrowRight,
   Clock,
@@ -116,25 +115,9 @@ export const PatientDashboard = () => {
         <h1 style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', fontWeight: 800, color: '#ffffff', marginBottom: '0.5rem' }}>
           Welcome, {profile?.full_name || 'Patient'}!
         </h1>
-        <p style={{ color: '#dcfce7', fontSize: 'clamp(0.92rem, 2.5vw, 1.05rem)', maxWidth: '600px' }}>
+        <p style={{ color: '#dcfce7', fontSize: 'clamp(0.92rem, 2.5vw, 1.05rem)', maxWidth: '600px', margin: 0 }}>
           Track your queue in real time, view upcoming visits, or book your next appointment with ease.
         </p>
-
-        {/* Quick action buttons (Section 9) */}
-        <div style={{ display: 'flex', gap: '0.65rem', marginTop: '1.25rem', flexWrap: 'wrap' }}>
-          <Link to="/patient/queue" className="btn btn-secondary btn-sm">
-            <Ticket size={18} />
-            <span>Get Queue Number</span>
-          </Link>
-          <Link to="/patient/appointments" className="btn btn-secondary btn-sm" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', borderColor: 'rgba(255,255,255,0.3)' }}>
-            <Calendar size={18} />
-            <span>Book Appointment</span>
-          </Link>
-          <Link to="/patient/history" className="btn btn-secondary btn-sm" style={{ background: 'transparent', color: '#fff', borderColor: 'rgba(255,255,255,0.3)' }}>
-            <History size={18} />
-            <span>Queue History</span>
-          </Link>
-        </div>
       </div>
 
       {/* Main Grid: Current Queue Status vs Next Appointment */}
