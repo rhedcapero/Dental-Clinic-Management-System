@@ -1276,3 +1276,69 @@ body.admin-login-page {
     padding: 0.5rem 0.75rem;
   }
 }
+
+/* ==========================================================================
+   PATIENT REAL-TIME NOTIFICATIONS
+   ========================================================================== */
+@keyframes bannerSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseBadge {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(21, 128, 61, 0.4);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 5px rgba(21, 128, 61, 0);
+  }
+}
+
+@keyframes bellRing {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  20%, 60% {
+    transform: rotate(12deg);
+  }
+  40%, 80% {
+    transform: rotate(-12deg);
+  }
+}
+
+.notification-bell-btn:hover {
+  background-color: #f0fdf4 !important;
+  color: #15803d !important;
+  border-color: #86efac !important;
+}
+

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { formatQueueNumber } from '../../components/QueueCard';
+import { sendCallNotification } from '../../lib/notificationService';
 import {
   Users,
   Clock,
@@ -216,7 +217,20 @@ export const StaffDashboard = () => {
         .eq('id', nextInLine.id);
 
       if (error) throw error;
-      setFeedback({ type: 'success', text: `Called ${formatQueueNumber(nextInLine.queue_number)} - ${nextInLine.profiles?.full_name}` });
+
+      // Send real-time call notification strictly to called patient
+      try {
+        await sendCallNotification({
+          patientId: nextInLine.patient_id,
+          queueId: nextInLine.id,
+          queueNumber: nextInLine.queue_number,
+          patientName: nextInLine.profiles?.full_name || nextInLine.patient?.full_name || 'Patient',
+        });
+      } catch (notifErr) {
+        console.warn('Real-time notification notice:', notifErr);
+      }
+
+      setFeedback({ type: 'success', text: `Called ${formatQueueNumber(nextInLine.queue_number)} - ${nextInLine.profiles?.full_name || 'Patient'}` });
       await fetchStaffData();
     } catch (err) {
       setFeedback({ type: 'error', text: err.message || 'Failed to call next patient.' });

@@ -400,3 +400,64 @@ BEGIN
         ALTER PUBLICATION supabase_realtime ADD TABLE public.appointments;
     END IF;
 END $$;
+
+-- 18. CREATE NOTIFICATIONS TABLE & POLICIES
+CREATE TABLE IF NOT EXISTS public.notifications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    patient_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    queue_id UUID REFERENCES public.queue(id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    message TEXT NOT NULL,
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_notifications_patient_id ON public.notifications(patient_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_created_at ON public.notifications(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_notifications_patient_unread ON public.notifications(patient_id, is_read);
+
+ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Patients can view own notifications" ON public.notifications;
+CREATE POLICY "Patients can view own notifications"
+ON public.notifications FOR SELECT
+TO authenticated
+USING (
+    auth.uid() = patient_id
+    OR EXISTS (SELECT 1 FROM public.admins WHERE public.admins.user_id = auth.uid())
+    OR EXISTS (SELECT 1 FROM public.profiles WHERE public.profiles.id = auth.uid() AND public.profiles.role IN ('admin', 'staff'))
+    OR EXISTS (SELECT 1 FROM public.patient WHERE public.patient.id = auth.uid() AND public.patient.role IN ('admin', 'staff'))
+);
+
+DROP POLICY IF EXISTS "Patients can update own notifications" ON public.notifications;
+CREATE POLICY "Patients can update own notifications"
+ON public.notifications FOR UPDATE
+TO authenticated
+USING (auth.uid() = patient_id)
+WITH CHECK (auth.uid() = patient_id);
+
+DROP POLICY IF EXISTS "Admins can manage all notifications" ON public.notifications;
+CREATE POLICY "Admins can manage all notifications"
+ON public.notifications FOR ALL
+TO authenticated
+USING (
+    EXISTS (SELECT 1 FROM public.admins WHERE public.admins.user_id = auth.uid())
+    OR EXISTS (SELECT 1 FROM public.profiles WHERE public.profiles.id = auth.uid() AND public.profiles.role IN ('admin', 'staff'))
+    OR EXISTS (SELECT 1 FROM public.patient WHERE public.patient.id = auth.uid() AND public.patient.role IN ('admin', 'staff'))
+)
+WITH CHECK (
+    EXISTS (SELECT 1 FROM public.admins WHERE public.admins.user_id = auth.uid())
+    OR EXISTS (SELECT 1 FROM public.profiles WHERE public.profiles.id = auth.uid() AND public.profiles.role IN ('admin', 'staff'))
+    OR EXISTS (SELECT 1 FROM public.patient WHERE public.patient.id = auth.uid() AND public.patient.role IN ('admin', 'staff'))
+);
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_publication_tables 
+        WHERE pubname = 'supabase_realtime' AND tablename = 'notifications'
+    ) THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE public.notifications;
+    END IF;
+END $$;
+

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { formatQueueNumber } from '../../components/QueueCard';
+import { sendCallNotification } from '../../lib/notificationService';
 import { Ticket, PlayCircle, CheckCircle2, SkipForward, RefreshCw, Filter } from 'lucide-react';
 
 export const StaffQueue = () => {
@@ -92,6 +93,23 @@ export const StaffQueue = () => {
       if (newStatus === 'completed') updates.completed_at = new Date().toISOString();
 
       await supabase.from('queue').update(updates).eq('id', id);
+
+      if (newStatus === 'serving') {
+        const item = queue.find((q) => q.id === id);
+        if (item) {
+          try {
+            await sendCallNotification({
+              patientId: item.patient_id,
+              queueId: item.id,
+              queueNumber: item.queue_number,
+              patientName: item.profiles?.full_name || item.patient?.full_name || 'Patient',
+            });
+          } catch (notifErr) {
+            console.warn('Real-time notification notice:', notifErr);
+          }
+        }
+      }
+
       fetchQueue();
     } catch (err) {
       console.error('Failed to update queue record:', err);

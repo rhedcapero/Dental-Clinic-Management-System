@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useNav } from '../context/NavContext';
 import { isSupabaseConfigured } from '../lib/supabase';
+import { NotificationDropdown } from './NotificationDropdown';
 import { Activity, LogOut, AlertTriangle, User, Menu, X } from 'lucide-react';
 
 export const Navbar = () => {
@@ -71,6 +72,8 @@ export const Navbar = () => {
         {/* Right Action Group */}
         {user && (
           <div className="navbar-user-actions">
+            {!isAdminPortalActive && !isAdmin && <NotificationDropdown />}
+
             <div className="navbar-user-badge-container">
               <div className="navbar-user-row">
                 <User size={17} color="#334155" style={{ flexShrink: 0 }} />

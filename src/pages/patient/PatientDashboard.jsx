@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { formatQueueNumber } from '../../components/QueueCard';
+import { NotificationBanner } from '../../components/NotificationBanner';
 import {
   Ticket,
   Calendar,
@@ -106,6 +107,9 @@ export const PatientDashboard = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      {/* Real-time Turn Call Notification Banner */}
+      <NotificationBanner />
+
       {/* Welcome Banner */}
       <div style={{ background: 'linear-gradient(135deg, #15803d 0%, #1e7e52 100%)', borderRadius: 'var(--radius-xl)', padding: 'clamp(1.25rem, 4vw, 2.25rem)', color: '#ffffff', boxShadow: '0 10px 25px -5px rgba(21, 128, 61, 0.25)' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.15)', padding: '0.35rem 0.85rem', borderRadius: '9999px', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.75rem' }}>

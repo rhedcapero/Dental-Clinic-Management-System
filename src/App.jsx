@@ -2,9 +2,11 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { NavProvider } from './context/NavContext';
+import { NotificationProvider } from './context/NotificationContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
+import { NotificationModal } from './components/NotificationModal';
 
 // Public Pages
 import { Home } from './pages/Home';
@@ -63,7 +65,9 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <NavProvider>
-        <Routes>
+          <NotificationProvider>
+            <NotificationModal />
+            <Routes>
           {/* Public Routes */}
           <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
           <Route path="/login" element={<PublicLayout><Login /></PublicLayout>} />
@@ -183,6 +187,7 @@ function App() {
           {/* Catch-all redirect */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+          </NotificationProvider>
         </NavProvider>
       </AuthProvider>
     </BrowserRouter>
